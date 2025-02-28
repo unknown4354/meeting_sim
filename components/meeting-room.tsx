@@ -47,7 +47,8 @@ export default function MeetingRoom({ onEndMeeting }: MeetingRoomProps) {
 
       try {
         // Connect to the FastAPI WebSocket endpoint
-        const ws = new WebSocket("ws://localhost:8000/ws")
+        const ws = new WebSocket("wss://meeting-sim.vercel.app/ws");
+
 
         ws.onopen = () => {
           setIsConnected(true)
@@ -61,7 +62,7 @@ export default function MeetingRoom({ onEndMeeting }: MeetingRoomProps) {
           if (message.startsWith("Audio file saved:")) {
             // Handle the audio file path
             const audioFilePath = message.replace("Audio file saved: ", "").trim()
-            setAiAudioUrl(`http://localhost:8000/${audioFilePath}`)
+            setAiAudioUrl(`https://meeting-sim.vercel.app/${audioFilePath}`)
           } else {
             // Handle the summary text
             setSummary(message)
@@ -203,7 +204,7 @@ export default function MeetingRoom({ onEndMeeting }: MeetingRoomProps) {
     setIsSimulating(true)
     setError(null)
     try {
-      const response = await fetch("http://localhost:8000/simulate_meeting")
+      const response = await fetch("https://meeting-sim.vercel.app/simulate_meeting")
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -232,7 +233,7 @@ export default function MeetingRoom({ onEndMeeting }: MeetingRoomProps) {
       setTranscript((prev) => [...prev, ...newMessages])
 
       // Set the AI audio URL
-      setAiAudioUrl(`http://localhost:8000/${data.audio_file}`)
+      setAiAudioUrl(`https://meeting-sim.vercel.app/${data.audio_file}`)
     } catch (error) {
       console.error("Error simulating meeting:", error)
       setError("Failed to simulate meeting. Please check if the server is running and accessible.")
